@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # API服务
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.agent
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=dev
+      - LOG_LEVEL=INFO
+    volumes:
+      - ../configs:/app/configs
+    depends_on:
+      - redis
+      - postgres
+
+  # MCP服务
+  mcp-server:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.mcp-server
+    ports:
+      - "8001:8000"
+    environment:
+      - ENV=dev
+      - LOG_LEVEL=DEBUG
+    depends_on:
+      - milvus
+      - nebula
+
+  # Redis缓存
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  # PostgreSQL数据库
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=tradflow
+      - POSTGRES_USER=tradflow
+      - POSTGRES_PASSWORD=tradflow123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Milvus向量数据库
+  milvus:
+    image: milvusdb/milvus:v2.3.3
+    ports:
+      - "19530:19530"
+    environment:
+      - ETCD_USE_EMBED=true
+      - COMMON_STORAGETYPE=local
+    volumes:
+      - milvus_data:/var/lib/milvus
+
+  # NebulaGraph图数据库
+  nebula:
+    image: vesoft/nebula-graph:v3.7.0
+    ports:
+      - "9669:9669"
+    environment:
+      - NebulaGraph_ROOT_PASSWORD=nebula123
+    volumes:
+      - nebula_data:/data
+
+volumes:
+  postgres_data:
+  milvus_data:
+  nebula_data:

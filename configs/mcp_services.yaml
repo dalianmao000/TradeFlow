@@ -1,0 +1,36 @@
+mcp_servers:
+  - service_name: rag_service
+    version: "1.0.0"
+    host: 0.0.0.0
+    port: 8000
+    capabilities:
+      - vector_search
+      - document_retrieval
+    health_check: /health
+
+  - service_name: ml_service
+    version: "1.0.0"
+    host: 0.0.0.0
+    port: 8001
+    capabilities:
+      - price_prediction
+      - demand_forecast
+    health_check: /health
+
+  - service_name: opt_service
+    version: "1.0.0"
+    host: 0.0.0.0
+    port: 8002
+    capabilities:
+      - production_optimize
+      - route_optimize
+    health_check: /health
+
+  - service_name: kg_service
+    version: "1.0.0"
+    host: 0.0.0.0
+    port: 8003
+    capabilities:
+      - graph_query
+      - risk_assessment
+    health_check: /health

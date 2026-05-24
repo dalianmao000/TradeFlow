@@ -1,0 +1,47 @@
+agents:
+  - agent_id: central
+    name: 中枢Agent
+    enabled: true
+    tools:
+      - route
+    timeout_ms: 30000
+
+  - agent_id: price_prediction
+    name: 价格预测Agent
+    enabled: true
+    tools:
+      - ml.predict_price
+      - fetch_market_data
+    timeout_ms: 60000
+
+  - agent_id: customer_recommend
+    name: 客户推荐Agent
+    enabled: true
+    tools:
+      - query_crm
+      - run_recommendation_model
+    timeout_ms: 30000
+
+  - agent_id: production_sales
+    name: 产销协同Agent
+    enabled: true
+    tools:
+      - opt.production_optimize
+      - query_ubmp_orders
+    timeout_ms: 120000
+
+  - agent_id: supply_chain
+    name: 供应链Agent
+    enabled: true
+    tools:
+      - opt.route_optimize
+      - check_hazmat_rules
+    timeout_ms: 60000
+
+  - agent_id: risk_control
+    name: 风控Agent
+    enabled: true
+    tools:
+      - calculate_var
+      - run_anomaly_detection
+    timeout_ms: 30000
